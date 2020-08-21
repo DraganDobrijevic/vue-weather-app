@@ -2,7 +2,7 @@
   <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
     <main>
       <div class="search-box">
-        <input type="text" class="search-bar" placeholder="Search..." v-model="query" @keypress="fetchWeather">
+        <input type="text" class="search-bar" placeholder="Search City" v-model="query" @keypress="fetchWeather">
       </div>
 
       <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
@@ -111,8 +111,12 @@ main {
 }
 
 .search-box {
-  width: 40%;
+  width: 30%;
   margin: 0 auto 30px auto;
+}
+
+.search-box input {
+  text-align: center;
 }
 
 .search-box .search-bar {
@@ -181,5 +185,12 @@ main {
   font-weight: 700;
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, .25);
+}
+
+@media screen and (max-width: 750px) {
+  .search-box {
+    width: 60%;
+    margin: 0 auto 30px auto;
+  }
 }
 </style>

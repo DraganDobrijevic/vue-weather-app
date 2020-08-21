@@ -18,12 +18,11 @@ export default {
     }, 
     created () {   
         window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
-        window.myWidgetParam.push({id: 11,cityid: this.cords_id,appid: this.api_key,units: 'metric',containerid: 'openweathermap-widget-11',  });  
+        window.myWidgetParam.push({id: 11, cityid: this.cords_id, appid: this.api_key, units: 'metric', containerid: 'openweathermap-widget-11',  });  
         this.createW();   
     },
     methods: {
         createW() {
-            console.log("opop");
             const script = document.createElement('script');
             script.async = true;
             script.charset = "utf-8";
@@ -38,8 +37,7 @@ export default {
             console.log(old);
             window.myWidgetParam = []; 
             console.log(window.myWidgetParam);  
-            window.myWidgetParam.push({id: 11,cityid: cords_id,appid: this.api_key,units: 'metric',containerid: 'openweathermap-widget-11',  });  
-            console.log("opopAjdeeee");
+            window.myWidgetParam.push({id: 11, cityid: cords_id, appid: this.api_key, units: 'metric', containerid: 'openweathermap-widget-11',  });  
             const script = document.createElement('script');
             script.async = true;
             script.charset = "utf-8";
@@ -60,10 +58,15 @@ export default {
     }
 
     @media screen and (max-width: 750px) {
+        .box {
+            display: block;
+            overflow: hidden;
+        }
+
         #openweathermap-widget-11 {
             overflow-x: scroll;
             overflow-y: hidden;
-            width: 400px;  
+            width: 100%;  
         }
     }
 </style>
