@@ -2,7 +2,7 @@
   <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
     <main>
       <div class="search-box">
-        <input type="text" class="search-bar" placeholder="Search City" v-model="query" @keypress="fetchWeather">
+        <input type="text" class="search-bar" placeholder="Search City" v-model="query" @click="hide" @keypress="fetchWeather">
       </div>
 
       <transition name="slide-fade">
@@ -15,7 +15,7 @@
           <div class="weather-box">
             <div @click="changeT(weather)" class="temp">{{ temperature }}°{{ unit }}</div>
             <div class="weather">{{ weather.weather[0].description }}</div>
-            <transition name="fade">
+            <transition name="slide-up">
               <Skycons v-if="start" v-bind:icon="icon" v-bind:url_base_icon="url_base_icon" v-bind:end="end" :cords_id="cords_id" v-bind:api_key="api_key"/>
             </transition>
           </div>
@@ -65,6 +65,11 @@ export default {
         this.show = false;
         this.start = false;
       }
+    },
+    hide() {
+      this.show = false;
+      this.start = false;
+      this.query = '';
     },
     changeT(weather) {
       // Formula for fahrenheit
@@ -208,6 +213,7 @@ main {
   margin: 30px 0px;
 
   box-shadow: 3px 6px rgba(0, 0, 0, .25);
+  cursor: pointer;
 }
 
 .weather-box .weather {
@@ -228,6 +234,7 @@ main {
 .slide-fade-enter-active {
   animation: slide-fade .8s;
 }
+
 .slide-fade-leave-active {
   animation: slide-fade .8s reverse;
   animation-delay: .5s;
@@ -251,15 +258,15 @@ main {
   display: none;
 }
 
-.fade-enter-active {
-  animation: fade 2s;
+.slide-up-enter-active {
+  animation: slide-up 2s;
 }
 
-.fade-leave-active {
-  animation: fade .2s reverse;
+.slide-up-leave-active {
+  animation: slide-up .2s reverse;
 }
 
-@keyframes fade {
+@keyframes slide-up {
   0% {
     opacity: 0;
     transform: translateY(70px);
