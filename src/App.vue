@@ -54,7 +54,7 @@ export default {
       if (e.key == "Enter") {
         e.target.blur();
         (async () => {
-          await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${process.env.VUE_APP_API_KEY}`)
+          await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
