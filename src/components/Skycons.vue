@@ -1,8 +1,6 @@
 <template>
     <div class="box">
-        <!-- <img width="200" height="200" :src="src" alt="Icon"> -->
         <div id="openweathermap-widget-11" :key="componentKey"></div>
-        <!-- <h1>{{ cords_id }}</h1> -->
     </div>
 </template>
 
@@ -32,11 +30,8 @@ export default {
         }
     },
     watch: {
-        cords_id(cords_id, old) {
-            console.log(cords_id);
-            console.log(old);
-            window.myWidgetParam = []; 
-            console.log(window.myWidgetParam);  
+        cords_id(cords_id) {
+            window.myWidgetParam = [];  
             window.myWidgetParam.push({id: 11, cityid: cords_id, appid: this.api_key, units: 'metric', containerid: 'openweathermap-widget-11',  });  
             const script = document.createElement('script');
             script.async = true;

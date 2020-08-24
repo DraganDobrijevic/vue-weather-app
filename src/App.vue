@@ -5,18 +5,22 @@
         <input type="text" class="search-bar" placeholder="Search City" v-model="query" @keypress="fetchWeather">
       </div>
 
-      <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
-        <div class="location-box">
-          <div class="location">{{ weather.name }}, {{ weather.sys.country }}</div>
-          <div class="date">{{ dateBuilder() }}</div>
+      <transition name="slide-fade">
+        <div class="weather-wrap" v-if="typeof weather.main != 'undefined' && show">
+          <div class="location-box">
+            <div class="location">{{ weather.name }}, {{ weather.sys.country }}</div>
+            <div class="date">{{ dateBuilder() }}</div>
+          </div>
+      
+          <div class="weather-box">
+            <div @click="changeT(weather)" class="temp">{{ temperature }}°{{ unit }}</div>
+            <div class="weather">{{ weather.weather[0].description }}</div>
+            <transition name="fade">
+              <Skycons v-if="start" v-bind:icon="icon" v-bind:url_base_icon="url_base_icon" v-bind:end="end" :cords_id="cords_id" v-bind:api_key="api_key"/>
+            </transition>
+          </div>
         </div>
-
-        <div class="weather-box">
-          <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
-          <div class="weather">{{ weather.weather[0].description }}</div>
-          <Skycons v-bind:icon="icon" v-bind:url_base_icon="url_base_icon" v-bind:end="end" :cords_id="cords_id" v-bind:api_key="api_key"/>
-        </div>
-      </div>
+      </transition>
     </main>
   </div>
 </template>
@@ -38,23 +42,48 @@ export default {
       url_base_icon: "http://openweathermap.org/img/wn/",
       icon: "",
       end: "@2x.png",
-      cords_id: ''
+      cords_id: '',
+      show: false,
+      start: false,
+      temperature: '',
+      unit: 'C'
     }
   },
   methods: {
     fetchWeather(e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        e.target.blur();
+        (async () => {
+          await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${process.env.VUE_APP_API_KEY}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
+          this.start = !this.start;
+          this.unit = 'C'
+        })(); 
+      } else {
+        this.show = false;
+        this.start = false;
+      }
+    },
+    changeT(weather) {
+      // Formula for fahrenheit
+      let fahrenheit = this.temperature * (9 / 5) + 32; 
+
+      // Change temperature to Celsius/Farenheit
+      if (this.unit === "C") {
+        this.unit = "F";
+        this.temperature = Math.floor(fahrenheit);
+      } else {
+        this.unit = "C";
+        this.temperature = Math.round(weather.main.temp);
       }
     },
     setResults(results) {
-      console.log(results);
+      this.show = !this.show;
       this.weather = results;
-      // this.icon = results.weather[0].icon;
       this.cords_id = results.id;
+      this.temperature = Math.round(results.main.temp);
     },
     dateBuilder() {
       let d = new Date();
@@ -86,6 +115,8 @@ export default {
 body {
   font-family: Arial, Helvetica, sans-serif;
   width: 100vw;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 #app {
@@ -193,4 +224,50 @@ main {
     margin: 0 auto 30px auto;
   }
 }
+
+.slide-fade-enter-active {
+  animation: slide-fade .8s;
+}
+.slide-fade-leave-active {
+  animation: slide-fade .8s reverse;
+  animation-delay: .5s;
+}
+
+@keyframes slide-fade {
+  0% {
+    transform: translateX(40px);
+    opacity: .5;
+  }
+  50% {
+    transform: translateX(-40px);
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+.weather-left-card__rising {
+  display: none;
+}
+
+.fade-enter-active {
+  animation: fade 2s;
+}
+
+.fade-leave-active {
+  animation: fade .2s reverse;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
 </style>
