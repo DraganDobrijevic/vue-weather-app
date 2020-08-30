@@ -16,7 +16,7 @@
             <div @click="changeT(weather)" class="temp">{{ temperature }}°{{ unit }}</div>
             <div class="weather">{{ weather.weather[0].description }}</div>
             <transition name="slide-up">
-              <Skycons v-if="start" v-bind:icon="icon" v-bind:url_base_icon="url_base_icon" v-bind:end="end" :cords_id="cords_id" v-bind:api_key="api_key"/>
+              <Widget v-if="start" v-bind:icon="icon" v-bind:url_base_icon="url_base_icon" v-bind:end="end" :cords_id="cords_id" v-bind:api_key="api_key"/>
             </transition>
           </div>
         </div>
@@ -26,12 +26,12 @@
 </template>
 
 <script>
-import Skycons from './components/Skycons.vue'
+import Widget from './components/Widget.vue'
 
 export default {
   name: 'App',
   components: {
-    Skycons
+    Widget
   },
   data() {
     return {
@@ -44,7 +44,7 @@ export default {
       end: "@2x.png",
       cords_id: '',
       show: false,
-      start: false,
+      start: true,
       temperature: '',
       unit: 'C'
     }
