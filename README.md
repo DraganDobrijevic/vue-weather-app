@@ -1,4 +1,5 @@
-# weather_app
+# vue weather app
+http://djagi-weather-app.herokuapp.com
 
 ## Project setup
 ```
